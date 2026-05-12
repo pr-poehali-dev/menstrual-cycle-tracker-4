@@ -25,13 +25,13 @@ function AppInner() {
 
   return (
     <div className="min-h-screen flex flex-col max-w-md mx-auto" style={{ background: "#fff5f7" }}>
-      <main className="flex-1 pb-24">
+      <main className="flex-1" style={{ paddingBottom: "calc(68px + env(safe-area-inset-bottom, 0px))" }}>
         {renderPage()}
       </main>
 
-      {/* Bottom nav — точно как на картинке */}
+      {/* Bottom nav */}
       <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-50 bg-white border-t"
-        style={{ borderColor: "#f0e0e8" }}>
+        style={{ borderColor: "#f0e0e8", paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
         <div className="flex items-center justify-around py-2 px-2">
           <NavBtn id="today" active={activeTab} onClick={setActiveTab}
             icon={
