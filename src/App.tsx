@@ -2,97 +2,98 @@ import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import CyclePage from "@/pages/CyclePage";
-import PregnancyPage from "@/pages/PregnancyPage";
-import SymptomsPage from "@/pages/SymptomsPage";
-import StatsPage from "@/pages/StatsPage";
-import RemindersPage from "@/pages/RemindersPage";
+import TodayPage from "@/pages/TodayPage";
+import TipsPage from "@/pages/TipsPage";
+import MessagesPage from "@/pages/MessagesPage";
+import PartnerPage from "@/pages/PartnerPage";
 
 const queryClient = new QueryClient();
 
-type Tab = "cycle" | "pregnancy" | "symptoms" | "stats" | "reminders";
-
-const tabs: { id: Tab; label: string; emoji: string }[] = [
-  { id: "cycle", label: "Цикл", emoji: "🌸" },
-  { id: "pregnancy", label: "Беременность", emoji: "🤰" },
-  { id: "symptoms", label: "Симптомы", emoji: "💊" },
-  { id: "stats", label: "Статистика", emoji: "📊" },
-  { id: "reminders", label: "Напоминания", emoji: "🔔" },
-];
+type Tab = "today" | "tips" | "messages" | "partner";
 
 function AppInner() {
-  const [activeTab, setActiveTab] = useState<Tab>("cycle");
+  const [activeTab, setActiveTab] = useState<Tab>("today");
 
   const renderPage = () => {
     switch (activeTab) {
-      case "cycle": return <CyclePage />;
-      case "pregnancy": return <PregnancyPage />;
-      case "symptoms": return <SymptomsPage />;
-      case "stats": return <StatsPage />;
-      case "reminders": return <RemindersPage />;
+      case "today": return <TodayPage />;
+      case "tips": return <TipsPage />;
+      case "messages": return <MessagesPage />;
+      case "partner": return <PartnerPage />;
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col max-w-md mx-auto relative">
-      {/* Background blobs */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
-        <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(244,143,177,0.18) 0%, transparent 70%)" }} />
-        <div className="absolute top-1/3 -left-16 w-56 h-56 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(206,147,216,0.15) 0%, transparent 70%)" }} />
-        <div className="absolute bottom-32 -right-10 w-48 h-48 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(244,143,177,0.18) 0%, transparent 70%)" }} />
-      </div>
-
-      {/* Header — скрыт для вкладки Цикл, там свой хедер */}
-      {activeTab !== "cycle" && (
-        <header className="sticky top-0 z-40 px-5 pt-6 pb-3"
-          style={{ background: "rgba(253, 240, 245, 0.85)", backdropFilter: "blur(20px)" }}>
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="font-display text-3xl font-light" style={{ color: "#e06090", letterSpacing: "0.02em" }}>
-                Луна
-              </h1>
-              <p className="text-xs font-body mt-0.5" style={{ color: "#b088b0" }}>
-                твой личный трекер
-              </p>
-            </div>
-            <div className="w-11 h-11 rounded-full flex items-center justify-center animate-float"
-              style={{ background: "linear-gradient(135deg, #f48fb1, #ce93d8)" }}>
-              <span className="text-xl">🌙</span>
-            </div>
-          </div>
-        </header>
-      )}
-
-      {/* Page content */}
-      <main className={`flex-1 pb-28 animate-fade-in ${activeTab !== "cycle" ? "px-4 pt-3" : ""}`} key={activeTab}>
+    <div className="min-h-screen flex flex-col max-w-md mx-auto" style={{ background: "#fff5f7" }}>
+      <main className="flex-1 pb-24">
         {renderPage()}
       </main>
 
-      {/* Bottom navigation */}
-      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-50 px-3 pb-4">
-        <div className="glass-card rounded-2xl px-2 py-2">
-          <div className="grid grid-cols-5 gap-0.5">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`nav-tab flex flex-col items-center gap-0.5 py-2 px-0.5 rounded-xl ${activeTab === tab.id ? "active" : ""}`}
-              >
-                <span className="text-base leading-none">{tab.emoji}</span>
-                <span className={`text-[9px] font-body font-medium leading-none mt-0.5 ${
-                  activeTab === tab.id ? "text-white" : "text-rose-300"
-                }`}>
-                  {tab.label}
-                </span>
-              </button>
-            ))}
-          </div>
+      {/* Bottom nav — точно как на картинке */}
+      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-50 bg-white border-t"
+        style={{ borderColor: "#f0e0e8" }}>
+        <div className="flex items-center justify-around py-2 px-2">
+          <NavBtn id="today" active={activeTab} onClick={setActiveTab}
+            icon={
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" strokeWidth="1.8" />
+                <path d="M3 9h18" stroke="currentColor" strokeWidth="1.8" />
+                <rect x="7" y="13" width="2" height="2" rx="0.5" fill="currentColor" />
+                <rect x="11" y="13" width="2" height="2" rx="0.5" fill="currentColor" />
+                <rect x="15" y="13" width="2" height="2" rx="0.5" fill="currentColor" />
+                <rect x="7" y="17" width="2" height="2" rx="0.5" fill="currentColor" />
+                <rect x="11" y="17" width="2" height="2" rx="0.5" fill="currentColor" />
+              </svg>
+            }
+            label="Сегодня" />
+          <NavBtn id="tips" active={activeTab} onClick={setActiveTab}
+            icon={
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.8" />
+                <rect x="13" y="3" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.8" />
+                <rect x="3" y="13" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.8" />
+                <circle cx="17" cy="17" r="4" stroke="currentColor" strokeWidth="1.8" />
+                <path d="M17 15v2l1 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            }
+            label="Советы" />
+          <NavBtn id="messages" active={activeTab} onClick={setActiveTab}
+            icon={
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+                <circle cx="9" cy="10" r="1" fill="currentColor" />
+                <circle cx="12" cy="10" r="1" fill="currentColor" />
+                <circle cx="15" cy="10" r="1" fill="currentColor" />
+              </svg>
+            }
+            label="Сообщения" />
+          <NavBtn id="partner" active={activeTab} onClick={setActiveTab}
+            icon={
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <circle cx="9" cy="7" r="3" stroke="currentColor" strokeWidth="1.8" />
+                <path d="M3 20c0-3.314 2.686-6 6-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                <circle cx="17" cy="7" r="3" stroke="currentColor" strokeWidth="1.8" />
+                <path d="M21 20c0-3.314-2.686-6-6-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+            }
+            label="Партнёр" />
         </div>
       </nav>
     </div>
+  );
+}
+
+function NavBtn({ id, active, onClick, icon, label }: {
+  id: Tab; active: Tab; onClick: (t: Tab) => void; icon: React.ReactNode; label: string;
+}) {
+  const isActive = id === active;
+  return (
+    <button onClick={() => onClick(id)}
+      className="flex flex-col items-center gap-0.5 px-3 py-1 transition-all"
+      style={{ color: isActive ? "#e05080" : "#bbb" }}>
+      {icon}
+      <span className="text-[11px] font-body font-medium">{label}</span>
+    </button>
   );
 }
 
