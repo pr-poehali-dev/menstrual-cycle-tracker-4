@@ -3,7 +3,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import CyclePage from "@/pages/CyclePage";
-import CalendarPage from "@/pages/CalendarPage";
 import PregnancyPage from "@/pages/PregnancyPage";
 import SymptomsPage from "@/pages/SymptomsPage";
 import StatsPage from "@/pages/StatsPage";
@@ -11,11 +10,10 @@ import RemindersPage from "@/pages/RemindersPage";
 
 const queryClient = new QueryClient();
 
-type Tab = "cycle" | "calendar" | "pregnancy" | "symptoms" | "stats" | "reminders";
+type Tab = "cycle" | "pregnancy" | "symptoms" | "stats" | "reminders";
 
 const tabs: { id: Tab; label: string; emoji: string }[] = [
   { id: "cycle", label: "Цикл", emoji: "🌸" },
-  { id: "calendar", label: "Календарь", emoji: "📅" },
   { id: "pregnancy", label: "Беременность", emoji: "🤰" },
   { id: "symptoms", label: "Симптомы", emoji: "💊" },
   { id: "stats", label: "Статистика", emoji: "📊" },
@@ -28,7 +26,6 @@ function AppInner() {
   const renderPage = () => {
     switch (activeTab) {
       case "cycle": return <CyclePage />;
-      case "calendar": return <CalendarPage />;
       case "pregnancy": return <PregnancyPage />;
       case "symptoms": return <SymptomsPage />;
       case "stats": return <StatsPage />;
@@ -48,34 +45,36 @@ function AppInner() {
           style={{ background: "radial-gradient(circle, rgba(244,143,177,0.18) 0%, transparent 70%)" }} />
       </div>
 
-      {/* Header */}
-      <header className="sticky top-0 z-40 px-5 pt-6 pb-3"
-        style={{ background: "rgba(253, 240, 245, 0.85)", backdropFilter: "blur(20px)" }}>
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="font-display text-3xl font-light" style={{ color: "#e06090", letterSpacing: "0.02em" }}>
-              Луна
-            </h1>
-            <p className="text-xs font-body mt-0.5" style={{ color: "#b088b0" }}>
-              твой личный трекер
-            </p>
+      {/* Header — скрыт для вкладки Цикл, там свой хедер */}
+      {activeTab !== "cycle" && (
+        <header className="sticky top-0 z-40 px-5 pt-6 pb-3"
+          style={{ background: "rgba(253, 240, 245, 0.85)", backdropFilter: "blur(20px)" }}>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="font-display text-3xl font-light" style={{ color: "#e06090", letterSpacing: "0.02em" }}>
+                Луна
+              </h1>
+              <p className="text-xs font-body mt-0.5" style={{ color: "#b088b0" }}>
+                твой личный трекер
+              </p>
+            </div>
+            <div className="w-11 h-11 rounded-full flex items-center justify-center animate-float"
+              style={{ background: "linear-gradient(135deg, #f48fb1, #ce93d8)" }}>
+              <span className="text-xl">🌙</span>
+            </div>
           </div>
-          <div className="w-11 h-11 rounded-full flex items-center justify-center animate-float"
-            style={{ background: "linear-gradient(135deg, #f48fb1, #ce93d8)" }}>
-            <span className="text-xl">🌙</span>
-          </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* Page content */}
-      <main className="flex-1 px-4 pb-28 pt-3 animate-fade-in" key={activeTab}>
+      <main className={`flex-1 pb-28 animate-fade-in ${activeTab !== "cycle" ? "px-4 pt-3" : ""}`} key={activeTab}>
         {renderPage()}
       </main>
 
       {/* Bottom navigation */}
       <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-50 px-3 pb-4">
         <div className="glass-card rounded-2xl px-2 py-2">
-          <div className="grid grid-cols-6 gap-0.5">
+          <div className="grid grid-cols-5 gap-0.5">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
